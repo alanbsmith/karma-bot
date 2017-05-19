@@ -109,11 +109,11 @@ class Bot < SlackRubyBot::Bot
     `karmabot list`: returns a list of users and their karma \n
     `karmabot top`: returns top 10 users \n
     `karmabot bottom`: returns bottom 10 users \n
-    `karma create {username}`: creates a new user \n
-    `{username} ++`: adds karma to user \n
-    `{username} --`: removes karma from user \n
-    `karma empty {username}`: resets user's karma \n
-    `karma destroy {username}`: deletes user"
+    `karma create username`: creates a new user \n
+    `username ++`: adds karma to user \n
+    `username --`: removes karma from user \n
+    `karma empty username`: resets user's karma \n
+    `karma destroy username`: deletes user"
   end
 
   def self.create_success_message(username)
