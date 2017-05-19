@@ -21,9 +21,9 @@ class Bot < SlackRubyBot::Bot
     client.say(channel: data.channel, text: leaderboard.join(" \n "))
   end
 
-  # users#create
-  match /^karma create @?(?<user>[\w|\.]+)/ do |client, data, match|
-    username = "#{match[:user]}"
+  # users#create by name
+  match /^karma create (?<user>[@?\w|\.]+)/ do |client, data, match|
+    username = "#{match[:user]}".gsub('@','')
     user = User.find_by(name: username)
     if user
       client.say(channel: data.channel, text: user_exists_message(username))
