@@ -21,8 +21,21 @@ class Bot < SlackRubyBot::Bot
     client.say(channel: data.channel, text: leaderboard.join(" \n "))
   end
 
-  # users#create by name
-  match /^karma create (?<user>[@?\w|\.]+)/ do |client, data, match|
+  # users#create (by id)
+  match /^karma create (?<user>[<]@\w{9}>)/ do |client, data, match|
+    user_id = match[:user].gsub(/<|@|>|\+|\s/, '')
+    username = client.users[user_id].name
+    user = User.find_by(name: username)
+    if user
+      client.say(channel: data.channel, text: user_exists_message(username))
+    else
+      User.create(name: username)
+      client.say(channel: data.channel, text: create_success_message(username))
+    end
+  end
+
+  # users#create (by name)
+  match /^karma create (?<user>[\w|\.]+)/ do |client, data, match|
     username = "#{match[:user]}".gsub('@','')
     user = User.find_by(name: username)
     if user
@@ -72,7 +85,21 @@ class Bot < SlackRubyBot::Bot
     end
   end
 
-  # users#empty karma
+  # users#empty karma (by id)
+  match /^karma empty (?<user>[<]@\w{9}>)/ do |client, data, match|
+    user_id = match[:user].gsub(/<|@|>|\+|\s/, '')
+    username = client.users[user_id].name
+    user = User.find_by(name: username)
+    if !user
+      client.say(channel: data.channel, text: user_not_found_message)
+    else
+      user.update_attributes(points: 0)
+      client.say(channel: data.channel, text: empty_karma_message(username, 0))
+    end
+  end
+
+
+  # users#empty karma (by name)
   match /^karma empty @?(?<user>[\w|\.]+)/ do |client, data, match|
     username = "#{match[:user]}"
     user = User.find_by(name: username)
@@ -84,7 +111,20 @@ class Bot < SlackRubyBot::Bot
     end
   end
 
-  # users#destroy
+  # users#destroy (by id)
+  match /^karma destroy (?<user>[<]@\w{9}>)/ do |client, data, match|
+    user_id = match[:user].gsub(/<|@|>|\+|\s/, '')
+    username = client.users[user_id].name
+    user = User.find_by(name: username)
+    if !user
+      client.say(channel: data.channel, text: user_not_found_message)
+    else
+      user.destroy
+      client.say(channel: data.channel, text: destroy_success_message(username))
+    end
+  end
+
+  # users#destroy (by name)
   match /^karma destroy @?(?<user>[\w|\.]+)/ do |client, data, match|
     username = "#{match[:user]}"
     user = User.find_by(name: username)
@@ -125,7 +165,7 @@ class Bot < SlackRubyBot::Bot
   end
 
   def self.user_not_found_message
-    "Hmm... I don't know that name.\nYou can create them with `karma create {username}`"
+    "Hmm... I don't know that name.\nYou can create them with `karma create username`"
   end
 
   def self.add_karma_message(username, karma)
