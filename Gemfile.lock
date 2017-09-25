@@ -91,7 +91,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
-    minitest (5.10.2)
+    minitest (5.10.1)
     multipart-post (2.0.0)
     nio4r (2.0.0)
     nokogiri (1.7.2)
@@ -173,6 +173,7 @@ DEPENDENCIES
   celluloid-io
   figaro
   listen (>= 3.0.5, < 3.2)
+  minitest (= 5.10.1)
   pg (~> 0.18)
   puma (~> 3.7)
   rails (~> 5.1.0)

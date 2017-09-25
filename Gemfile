@@ -20,6 +20,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "minitest", "5.10.1" #locked here to address https://github.com/seattlerb/minitest/issues/689
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
