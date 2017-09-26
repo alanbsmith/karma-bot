@@ -67,7 +67,7 @@ class Bot < SlackRubyBot::Bot
   end
 
   # users#update karma (by name)
-  scan(/(@?[\w.]+\s?[-|\+]{2})+/) do |client, data, messages|
+  scan(RegularExpressions::UPDATE_KARMA_BY_NAME) do |client, data, messages|
     messages.flatten.map do |message|
       username = message.gsub(/\+{2}|-{2}|@/, '').strip.downcase
       operation = message[-2,2]
